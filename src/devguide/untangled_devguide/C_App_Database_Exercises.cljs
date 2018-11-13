@@ -6,18 +6,32 @@
             [cljs.reader :as r]))
 
 (def cars-table
-  {
+  {:cars/by-id {1 { :id 1 :make "Nissan" :model "Leaf" }
+                2 { :id 2 :make "Dodge" :model "Dart" }
+                3 { :id 3 :make "Ford" :model "Mustang" }}
                                         ; TODO (exercise 1): Add a :cars/by-id table
    })
 
 (def favorites
                                         ; TODO (exercise 2): merge your `cars-table` from above here
-  {
+  (merge {
+          :favorite-car [:cars/by-id 1]
+
                                         ; TODO (exercise 2): Add a :favorite-car key that points to the Nissan Leaf via an ident
-   })
+          } cars-table))
 
 (def ex3-uidb
   {
+   :main-panel {:toolbar {:tools  [:toolbar :main]}
+                :canvas {:data  [:canvas :main]}}
+
+   :toolbar {:main [[:tools/by-id 1] [:tools/by-id 2]]}
+   :canvas {:main [[:data/by-id 1]]}
+
+   :tools/by-id {1 {:label "Cut"}
+                 2 {:label "Copy"}}
+
+   :data/by-id {1 {:x 1, :y 3}}
                                         ; TODO (exercise 3): Add tables. See exercise text.
    })
 
@@ -92,9 +106,15 @@
   (is (= {:main-panel
           {:toolbar {:tools [{:label "Cut"} {:label "Copy"}]},
            :canvas  {:data [{:x 1, :y 3}]}}}
-        (om/db->tree '[{:main-panel [{:toolbar [{:tools [:label]}]}
-                                     {:canvas [{:data [:x :y]}]}]}] ex3-uidb ex3-uidb))))
+         (om/db->tree '[{:main-panel [{:toolbar [{:tools [:label]}]}
+                                      {:canvas [{:data [:x :y]}]}]}] ex3-uidb ex3-uidb))))
+
+
 
 (defcard-doc
   "The solutions are in `src/guide/untangled_devguide/app_database/solutions.cljs`. Now you're ready
   to see how to get the data out using [queries](#!/untangled_devguide.D_Queries)")
+
+;;(js/console.log ex3-uidb)
+
+;;(js/console.log (om/db->tree '[{:main-panel [{:toolbar [{:tools [:label]}]} {:canvas [{:data [:x :y]}]}]}] ex3-uidb ex3-uidb))
